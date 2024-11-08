@@ -2,20 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 95%; /* Light background */
+    --foreground: 0 0% 5.1%; /* Dark foreground */
+    --card: 0 0% 92%; /* White card */
+    --card-foreground: 0 0% 5.1%; /* Dark text on card */
+    --popover: 0 0% 95%; /* White popover */
+    --popover-foreground: 0 0% 5.1%; /* Dark text on popover */
+    --primary: 78 88% 67%; /* Light green for buttons */
+    --primary-foreground: 100 9% 13%; /* White text on primary */
+    --secondary: 100 9% 13%; /* Dark green background */
+    --secondary-foreground: 0 0% 95%; /* White text on secondary */
+    --tertiary: 159 92% 10%; /* Dark green background */
+    --tertiary-foreground: 0 0% 95%; /* White text on tertiary */
+    --muted: 0 0% 78%; /* Muted text */
+    --muted-foreground: 0 0% 70%; /* Muted foreground */
+    --accent: 210 6.6% 36.9%; /* Muted text for accent */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --destructive: 0 84.2% 60.2%; /* Destructive color */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --border: 0 0% 92.5%; /* Light border */
+    --input: 0 0% 92.5%; /* Light input background */
+    --ring: 78 88% 67%; /* Light green ring */
+    --chart-1: 74 32% 76%; /* Chart color 1 */
+    --chart-2: 60 8% 90%; /* Chart color 2 */
+    --chart-3: 222, 81%, 94%; /* Chart color 3 */
+    --radius: 0.5rem; /* Border radius */
+  }
+  .dark {
+    --background: 0 0% 5.1%; /* Dark background */
+    --foreground: 0 0% 95%; /* Light foreground */
+    --card: 0 0% 10%; /* Dark card */
+    --card-foreground: 0 0% 95%; /* Light text on card */
+    --popover: 0 0% 5.1%; /* White popover */
+    --popover-foreground: 0 0% 95%; /* Dark text on popover */
+    --primary: 78 88% 67%; /* Light green for buttons */
+    --primary-foreground: 100 9% 13%; /* White text on primary */
+    --secondary: 100 9% 13%; /* Dark green background */
+    --secondary-foreground: 0 0% 95%; /* White text on secondary */
+    --tertiary: 159 92% 10%; /* Dark green background */
+    --tertiary-foreground: 0 0% 95%; /* White text on tertiary */
+    --muted: 0 0% 20%; /* Dark muted text */
+    --muted-foreground: 0 0% 70%;; /* Muted foreground */
+    --accent: 0 0% 5.1%; /* Dark accent */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --destructive: 0 62.8% 30.6%; /* Dark destructive color */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --border: 0 0% 10%; /* Dark border */
+    --input: 0 0% 10%; /* Dark input background */
+    --ring: 0 0% 100%; /* White ring */
+    --chart-1: 74 32% 76%; /* Chart color 1 */
+    --chart-2: 60 8% 90%; /* Chart color 2 */
+    --chart-3: 222, 81%, 94%; /* Chart color 3 */
+    --radius: 0.5rem; /* Border radius */
+}
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .bg-grid-white\/10 {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  }
 }

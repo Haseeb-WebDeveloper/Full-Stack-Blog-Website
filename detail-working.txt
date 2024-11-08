@@ -1,0 +1,177 @@
+# Blog Application - Detailed Technical Documentation
+
+## 1. Project Architecture
+
+### Directory Structure:
+- /src/app: Main application routes and pages
+- /src/components: Reusable UI components
+- /src/models: Database models
+- /src/lib: Utility functions
+- /src/contexts: React contexts for state management
+- /src/utils: Validation and helper functions
+
+## 2. Database Setup (MongoDB)
+
+### Connection:
+- MongoDB connection is handled in `/src/lib/db.ts`
+- Uses mongoose for MongoDB interactions
+- Connection string stored in `.env` as MONGO_URI
+
+### Models:
+1. Admin Model (`/src/models/admin.model.ts`):
+   - Schema fields: name, email, password
+   - Password hashing using bcrypt
+   - Custom methods for password comparison
+   - Timestamps for created/updated tracking
+
+## 3. Authentication Flow
+
+### A. Signup Process:
+1. User visits `/admin` page
+2. Fills signup form with:
+   - Full Name
+   - Email
+   - Password
+
+3. Client-side validation:
+   - Name: minimum 2 characters
+   - Email: valid email format
+   - Password: minimum 6 characters
+
+4. Form submission:
+   - Frontend sends POST request to `/api/admin/signup`
+   - Request includes: { name, email, password }
+
+5. Backend processing:   ```typescript
+   // /api/admin/signup/route.ts workflow:
+   a. Validate input data
+   b. Check if email already exists
+   c. Create new admin in database
+   d. Password automatically hashed via mongoose middleware
+   e. Return success response   ```
+
+### B. Login Process:
+1. User visits `/admin/login`
+2. Enters credentials:
+   - Email
+   - Password
+
+3. Form submission:
+   - Frontend sends POST to `/api/admin/login`
+   - Request includes: { email, password }
+
+4. Backend processing:   ```typescript
+   // /api/admin/login/route.ts workflow:
+   a. Find admin by email
+   b. Compare password using bcrypt
+   c. If successful:
+      - Create HTTP-only cookie with adminId
+      - Return admin data (excluding password)
+   d. If failed:
+      - Return error message   ```
+
+### C. Authentication State Management:
+1. Auth Context (`/src/contexts/auth-context.tsx`):
+   - Provides global auth state
+   - Stores admin information
+   - Handles auth state changes
+
+2. Auth Check Flow:   ```typescript
+   // On app load:
+   a. Check for adminId cookie
+   b. If cookie exists:
+      - Fetch admin data from /api/admin/check-auth
+      - Update auth context
+   c. If no cookie/invalid:
+      - Clear auth context   ```
+
+## 4. Frontend Components
+
+### A. Navbar (`/src/components/sections/navbar.tsx`):
+- Dynamic rendering based on auth state
+- Shows different buttons for logged-in/out users
+- Handles logout functionality
+
+### B. Auth Pages:
+1. Signup Page (`/src/app/admin/page.tsx`):
+   - Form validation
+   - Error handling
+   - Success redirection
+
+2. Login Page (`/src/app/admin/login/page.tsx`):
+   - Credential validation
+   - Auth state update
+   - Loading states
+
+## 5. API Routes
+
+### A. Admin Routes:
+1. `/api/admin/signup`:
+   - Creates new admin
+   - Handles validation
+   - Error handling
+
+2. `/api/admin/login`:
+   - Authenticates admin
+   - Sets cookies
+   - Returns admin data
+
+3. `/api/admin/check-auth`:
+   - Verifies authentication
+   - Returns current admin data
+
+4. `/api/admin/logout`:
+   - Clears authentication cookie
+   - Resets auth state
+
+## 6. Security Features
+
+### A. Password Security:
+- Passwords hashed using bcrypt
+- Salt rounds: 10 (configurable)
+- Never stored in plain text
+
+### B. Cookie Security:
+- HTTP-only cookies
+- Secure in production
+- SameSite policy: lax
+- 7-day expiration
+
+### C. Input Validation:
+- Client-side validation
+- Server-side validation
+- XSS prevention
+- Input sanitization
+
+## 7. Error Handling
+
+### A. Frontend:
+- Form validation errors
+- API error displays
+- Loading states
+- User feedback
+
+### B. Backend:
+- Try-catch blocks
+- Proper error responses
+- Status codes
+- Error logging
+
+## 8. Workflow Example
+
+### Complete Signup -> Login Flow:
+1. User visits `/admin`
+2. Fills signup form
+3. Frontend validates input
+4. Backend creates account
+5. Redirects to login
+6. User enters credentials
+7. Backend authenticates
+8. Sets auth cookie
+9. Updates auth context
+10. Redirects to home
+11. Navbar updates to show admin options
+
+## 9. Development Notes
+
+### A. Environment Setup:
